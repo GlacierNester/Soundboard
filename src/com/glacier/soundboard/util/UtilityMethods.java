@@ -11,8 +11,16 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Properties;
 
-import javafx.stage.FileChooser;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
 
 public class UtilityMethods {
 	public static void writeFileDataToProperties(File file) 
@@ -21,13 +29,7 @@ public class UtilityMethods {
 		String filepath = file.getPath();
 		if(!isAudio(filename) && isPhoto(filename))
 		{
-			Stage primaryStage = new Stage();
-			FileChooser chooser = new FileChooser();
-			chooser.setInitialDirectory(new File(System.getProperty("user.dir")));
-			chooser.setTitle("What sound is this for?");
-			File temp = chooser.showOpenDialog(primaryStage);
-			filename=temp.getName().substring(0, temp.getName().lastIndexOf("."));
-			filename+=".photo";
+			filename = getChosenFile() + ".photo";
 		}
 		filepath = filepath.replace('\\', '/');
 		filename = filename.replace(' ', '_');
@@ -58,7 +60,46 @@ public class UtilityMethods {
 			System.err.println("Error writing to properties file, not found despite our efforts to create it");
 		}
 	}
-	
+
+	private static String getChosenFile() {
+		Stage primaryStage = new Stage();
+		HBox wrapthings = new HBox();
+		VBox radioButtons = new VBox();
+		ToggleGroup toggle = new ToggleGroup();
+		Button btChoose = new Button("I Choose This One");
+		ArrayList<String> choice = new ArrayList<String>();
+		for(String x : getKeysList())
+		{
+			if(isAudio(x))
+			{
+				if(!hasPhoto(x))
+				{
+					RadioButton option = new RadioButton(x);
+					option.setToggleGroup(toggle);
+					radioButtons.getChildren().add(option);
+				}
+			}
+		}
+		btChoose.setOnAction(new EventHandler<ActionEvent>(){
+			@Override
+			public void handle(ActionEvent event)
+			{
+				RadioButton rad = (RadioButton) toggle.getSelectedToggle();
+				choice.add(rad.getText());
+				primaryStage.close();
+			}
+		});
+		wrapthings.getChildren().add(radioButtons);
+		wrapthings.getChildren().add(btChoose);
+		primaryStage.setScene(new Scene(wrapthings,500,500));
+		primaryStage.showAndWait();
+		return choice.get(choice.size()-1).substring(0, choice.get(choice.size()-1).lastIndexOf("."));
+	}
+
+	private static boolean hasPhoto(String x) {
+		return getProperties().containsKey(x.substring(0, x.lastIndexOf("."))+ ".photo");
+	}
+
 	private static boolean isPhoto(String filename) {
 		boolean ret = false;
 		if(filename.substring(filename.lastIndexOf(".")).contains("bmp"))
