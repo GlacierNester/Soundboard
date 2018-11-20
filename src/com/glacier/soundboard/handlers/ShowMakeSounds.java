@@ -27,8 +27,6 @@ public class ShowMakeSounds implements EventHandler<ActionEvent> {
 
 	@Override
 	public void handle(ActionEvent event) {
-		// TODO For each name/file pair in the properties file, show a button that plays a sound
-		// potentially, if we can show images in buttons instead, make it so, but we gotta get soundmaking first 
 		Stage primaryStage = new Stage();
 		HBox wrapThings = new HBox();
 		VBox buttons = new VBox();
@@ -55,7 +53,7 @@ public class ShowMakeSounds implements EventHandler<ActionEvent> {
 						System.out.println("Playing item " +mediaPlayer.getMedia().getSource()+" at " + UtilityMethods.getCurrentTimestamp());
 					}
 				});
-				if(props.containsKey(key.substring(0,key.lastIndexOf("."))+".photo"))
+				if(UtilityMethods.hasPhoto(key))
 				{
 					Image img = new Image(new File(props.getProperty(key.substring(0,key.lastIndexOf("."))+".photo")).toURI().toString());
 					BackgroundImage backgroundImage = new BackgroundImage(img, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
@@ -81,6 +79,7 @@ public class ShowMakeSounds implements EventHandler<ActionEvent> {
 			System.out.println(x.getParent());
 		}
 		wrapThings.getChildren().add(buttons);
+		//TODO: make the scene respond to the size of things
 		Scene primaryScene = new Scene(wrapThings,200,200);
 		primaryStage.setScene(primaryScene);
 		primaryStage.show();

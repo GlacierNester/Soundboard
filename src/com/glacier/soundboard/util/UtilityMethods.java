@@ -111,7 +111,7 @@ public class UtilityMethods {
 		return choice.get(choice.size()-1).substring(0, choice.get(choice.size()-1).lastIndexOf("."));
 	}
 
-	private static boolean hasPhoto(String x) {
+	public static boolean hasPhoto(String x) {
 		return getProperties().containsKey(x.substring(0, x.lastIndexOf("."))+ ".photo");
 	}
 
