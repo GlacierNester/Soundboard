@@ -1,12 +1,14 @@
 package com.glacier.soundboard.handlers;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Properties;
 
 import com.glacier.soundboard.util.UtilityMethods;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -32,11 +34,14 @@ public class ShowMakeSounds implements EventHandler<ActionEvent> {
 		VBox buttons = new VBox();
 		Properties props = UtilityMethods.getProperties();
 		String[] keys = UtilityMethods.getKeysList();
+		ArrayList<Button> buttonList = new ArrayList<Button>();
+		HBox row = new HBox();
+		buttons.getChildren().add(row);
+		//we have to add the initial row first
 		for(String key : keys)
 		{
 			if(!key.toLowerCase().contains(".photo"))
 			{
-				System.out.println("Creating button for file " + props.getProperty(key));
 				Media media = new Media(new File(props.getProperty(key)).toURI().toString());
 				MediaPlayer mediaPlayer = new MediaPlayer(media);
 				Button btnItem = new Button(key);
@@ -61,14 +66,21 @@ public class ShowMakeSounds implements EventHandler<ActionEvent> {
 			        btnItem.setPrefSize(img.getWidth(),img.getHeight());
 			        btnItem.setMinSize(img.getWidth(),img.getHeight());
 				}
-				buttons.getChildren().add(btnItem);
+				buttonList.add(btnItem);
+				if(buttonList.size()%5 == 1 && buttonList.size()>5)
+				{
+					row = new HBox();
+					buttons.getChildren().add(row);
+				}
+				row.getChildren().add(btnItem);
 				System.out.println("Button for file " + props.getProperty(key) + " created at " + UtilityMethods.getCurrentTimestamp());
 			}
 		}
-//		buttons.setFillWidth(true);
-//		wrapThings.setFillHeight(true);
+		for(Node x : buttons.getChildren())
+		{
+			System.out.println(x.getParent());
+		}
 		wrapThings.getChildren().add(buttons);
-		//TODO: size this to the overall size of the buttons
 		Scene primaryScene = new Scene(wrapThings,200,200);
 		primaryStage.setScene(primaryScene);
 		primaryStage.show();

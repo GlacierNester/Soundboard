@@ -19,7 +19,7 @@ public class UtilityMethods {
 	{
 		String filename = file.getName();
 		String filepath = file.getPath();
-		if(!isAudio(filename))
+		if(!isAudio(filename) && isPhoto(filename))
 		{
 			Stage primaryStage = new Stage();
 			FileChooser chooser = new FileChooser();
@@ -59,9 +59,29 @@ public class UtilityMethods {
 		}
 	}
 	
+	private static boolean isPhoto(String filename) {
+		boolean ret = false;
+		if(filename.substring(filename.lastIndexOf(".")).contains("bmp"))
+		{
+			ret = true;
+		}
+		if(filename.substring(filename.lastIndexOf(".")).contains("gif"))
+		{
+			ret = true;
+		}
+		if(filename.substring(filename.lastIndexOf(".")).contains("jpeg"))
+		{
+			ret = true;
+		}
+		if(filename.substring(filename.lastIndexOf(".")).contains("png"))
+		{
+			ret = true;
+		}
+		return ret;
+	}
+
 	private static boolean isAudio(String filename) {
 		boolean ret = false;
-		
 		if(filename.substring(filename.lastIndexOf(".")).contains("mp3"))
 		{
 			ret = true;
@@ -74,7 +94,7 @@ public class UtilityMethods {
 		{
 			ret = true;
 		}
-		if(filename.substring(filename.lastIndexOf(".")).contains("aac"))
+		if(filename.substring(filename.lastIndexOf(".")).contains("m4a"))
 		{
 			ret = true;
 		}
