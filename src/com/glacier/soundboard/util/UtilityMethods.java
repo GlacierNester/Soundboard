@@ -11,6 +11,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Properties;
 
+import com.glacier.soundboard.err.ErrorTypes;
+import com.glacier.soundboard.err.Errors;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -31,33 +34,40 @@ public class UtilityMethods {
 		{
 			filename = getChosenFile() + ".photo";
 		}
-		filepath = filepath.replace('\\', '/');
-		filename = filename.replace(' ', '_');
-		//turns out that properties files don't like having spaces in the key, so we simply write the key to have underscores instead of spaces
-		//ezpz
-		File propertiesFile = new File(Constants.propertiesPath);
-		if(!propertiesFile.exists())
+		if(!filename.equals(".photo"))
 		{
-			createPropertiesFile();
-			propertiesFile = new File(Constants.propertiesPath);
-		}
-		try 
-		{
-			if(!getProperties().containsKey(filename))
+			filepath = filepath.replace('\\', '/');
+			filename = filename.replace(' ', '_');
+			//turns out that properties files don't like having spaces in the key, so we simply write the key to have underscores instead of spaces
+			//ezpz
+			File propertiesFile = new File(Constants.propertiesPath);
+			if(!propertiesFile.exists())
 			{
-				FileOutputStream outfos = new FileOutputStream(propertiesFile,true);
-				//I was today (11/19/2018) years old when I realized again
-				//that without that boolean there, it doesn't just append to the file
-				PrintStream outps = new PrintStream(outfos);
-				outps.println(filename + "=" + filepath);
-				System.out.println("Filename written is " + filename);
-				System.out.println("Filepath written is " + filepath);
-				System.out.println("Filename/path written at " + getCurrentTimestamp());
-				outps.close();
+				createPropertiesFile();
+				propertiesFile = new File(Constants.propertiesPath);
 			}
-		} catch (FileNotFoundException e) 
+			try 
+			{
+				if(!getProperties().containsKey(filename))
+				{
+					FileOutputStream outfos = new FileOutputStream(propertiesFile,true);
+					//I was today (11/19/2018) years old when I realized again
+					//that without that boolean there, it doesn't just append to the file
+					PrintStream outps = new PrintStream(outfos);
+					outps.println(filename + "=" + filepath);
+					System.out.println("Filename written is " + filename);
+					System.out.println("Filepath written is " + filepath);
+					System.out.println("Filename/path written at " + getCurrentTimestamp());
+					outps.close();
+				}
+			} catch (FileNotFoundException e) 
+			{
+				System.err.println("Error writing to properties file, not found despite our efforts to create it");
+			}
+		}
+		else
 		{
-			System.err.println("Error writing to properties file, not found despite our efforts to create it");
+			Errors.showErrorStage(ErrorTypes.NO_AUDIO_TO_SET);
 		}
 	}
 
@@ -89,6 +99,11 @@ public class UtilityMethods {
 				primaryStage.close();
 			}
 		});
+		if(radioButtons.getChildren().isEmpty())
+		{
+			primaryStage.close();
+			return "";
+		}
 		wrapthings.getChildren().add(radioButtons);
 		wrapthings.getChildren().add(btChoose);
 		primaryStage.setScene(new Scene(wrapthings,500,500));
