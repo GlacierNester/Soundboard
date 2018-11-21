@@ -10,14 +10,13 @@ public class Constants {
 	public static String logPath = baseDrive+"Glacier Nester/logs/";
 	public static String howTo = "How to add audio?\n"
 							   + "1. Select an audio\n"
-							   + "\t a. Simply press the button that says add things\n"
+							   + "\t a. Simply press the button that says add sounds\n"
 							   + "\t b. Select your sound to get added to the board\n"
 							   + "2. Select a photo\n"
 							   + "\t a. Want a photo to click instead of that garden variety button?\n"
-							   + "\t b. Hit that add things button again, and pick a photo!\n"
+							   + "\t b. Hit that add photos button, and select a photo!\n"
 							   + "3. Select which audio that photo is for\n"
-							   + "\t a. Pick what audio you want that photo to represent\n"
-							   + "\t b. Picked the wrong audio? Well, now that audio you picked has a photo to it! Yay!";
+							   + "\t a. You'll see a list of available audios to pick for!\n";
 	public static int openingSizeOne = 407;
 	public static int openingSizeTwo = 99;
 	public static int howToSizeOne = 602;

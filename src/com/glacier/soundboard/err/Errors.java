@@ -12,18 +12,31 @@ public class Errors {
 		{
 			showNoPhoto();
 		}
+		else if(errorType.equals(ErrorTypes.ALREADY_EXISTS.toString()))
+		{
+			showAlreadySet();
+		}
 	}
 	public static void showErrorStage(ErrorTypes error)
 	{
 		showErrorStage(error.toString());
 	}
+	private static void showAlreadySet() {
+		Stage primaryStage = new Stage();
+		Text text = new Text("Oh dear, you've already set that up!\nClose me to keep going!");
+		HBox holdThings = new HBox();
+		holdThings.getChildren().add(text);
+		primaryStage.setScene(new Scene(holdThings,255,100));
+		primaryStage.show();
+	}
+	
 	private static void showNoPhoto()
 	{
 		Stage primaryStage = new Stage();
 		Text text = new Text("There aren't any audios to set a picture for!\nClose me to keep going!");
 		HBox holdThings = new HBox();
 		holdThings.getChildren().add(text);
-		primaryStage.setScene(new Scene(holdThings,100,100));
+		primaryStage.setScene(new Scene(holdThings,292,100));
 		primaryStage.show();
 	}
 }

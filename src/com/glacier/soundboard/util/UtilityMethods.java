@@ -26,6 +26,10 @@ import javafx.stage.Stage;
 
 
 public class UtilityMethods {
+	/**
+	 * Writes the data of a given file to the properties file so the rest of the soundbar can use it
+	 * @param file the file whose data we're writing to the properties file
+	 */
 	public static void writeFileDataToProperties(File file) 
 	{
 		String filename = file.getName();
@@ -36,10 +40,10 @@ public class UtilityMethods {
 		}
 		if(!filename.equals(".photo"))
 		{
+			//because if it equals ".photo" then they're coming back from the photo selector without having any audios to assign it to
 			filepath = filepath.replace('\\', '/');
 			filename = filename.replace(' ', '_');
-			//turns out that properties files don't like having spaces in the key, so we simply write the key to have underscores instead of spaces
-			//ezpz
+			//these two replacements make the key and the filepath play nice in the properties file
 			File propertiesFile = new File(Constants.propertiesPath);
 			if(!propertiesFile.exists())
 			{
@@ -59,6 +63,10 @@ public class UtilityMethods {
 					System.out.println("Filepath written is " + filepath);
 					System.out.println("Filename/path written at " + getCurrentTimestamp());
 					outps.close();
+				}
+				else
+				{
+					Errors.showErrorStage(ErrorTypes.ALREADY_EXISTS);
 				}
 			} catch (FileNotFoundException e) 
 			{
@@ -236,10 +244,8 @@ public class UtilityMethods {
 		{
 			System.err.println("Error in fetching the list of keys at " + getCurrentTimestamp());
 		}
-		//note: filenames can't contain spaces, handle that in the input method
 		ArrayList<String> listKeys = new ArrayList<String>();
 		props.forEach((key,value) -> listKeys.add((String) key));
-		System.out.println("List of Keys Fetched at " + getCurrentTimestamp());
 		String[] keys = listKeys.toArray(new String[listKeys.size()]);
 		return keys;
 	}
@@ -255,7 +261,6 @@ public class UtilityMethods {
 		{
 			System.err.println("Error in fetching the properties at " + getCurrentTimestamp());
 		}
-		System.out.println("Properties Fetched at " + getCurrentTimestamp());
 		return props;
 	}
 }
