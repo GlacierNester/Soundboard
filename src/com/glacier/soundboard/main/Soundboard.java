@@ -32,8 +32,9 @@ public class Soundboard extends Application {
 		btHow.setOnAction(new ShowHowTo());
 		buttons.getChildren().addAll(btSound,btPhoto,btNo,btHow);
 		wrapThings.getChildren().addAll(question,buttons);
-		Scene primaryScene = new Scene(wrapThings,Constants.openingSizeOne,Constants.openingSizeTwo);
+		Scene primaryScene = new Scene(wrapThings,Constants.openingWidth,Constants.openingHeight);
 		primaryStage.setScene(primaryScene);
+		primaryStage.setTitle("Soundboard Menu");
 		primaryStage.show();
 	}
 	

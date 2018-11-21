@@ -17,10 +17,15 @@ public class Constants {
 							   + "\t b. Hit that add photos button, and select a photo!\n"
 							   + "3. Select which audio that photo is for\n"
 							   + "\t a. You'll see a list of available audios to pick for!\n";
-	public static int openingSizeOne = 407;
-	public static int openingSizeTwo = 99;
-	public static int howToSizeOne = 602;
-	public static int howToSizeTwo = 256;
+	public static int openingWidth = 407;
+	public static int openingHeight = 99;
+	public static int howToWidth = 602;
+	public static int howToHeight = 256;
+	public static int errorWidth = 300;
+	public static int errorHeight = 100;
+	public static int pickPhotoWidth = 244;
+	public static int pickPhotoHeight = 96;
+	public static int rowSize = 5;
 	private static String[] photooptions = {"*.png","*.bmp","*.gif","*.jpeg"};
 	private static String[] audiooptions = {"*.mp3","*.aiff","*.m4a","*.wav"};
 	public static List<String> photoExtensions = Arrays.asList(photooptions);

@@ -1,6 +1,7 @@
 package com.glacier.soundboard.err;
 
 import com.glacier.soundboard.handlers.AddSoundsHandler;
+import com.glacier.soundboard.util.Constants;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -36,7 +37,8 @@ public class Errors {
 		Text text = new Text("Oh dear, you've already set that up!\nClose me to keep going!");
 		HBox holdThings = new HBox();
 		holdThings.getChildren().add(text);
-		primaryStage.setScene(new Scene(holdThings,255,100));
+		primaryStage.setScene(new Scene(holdThings,Constants.errorWidth,Constants.errorHeight));
+		primaryStage.setTitle("Already Set Error");
 		primaryStage.show();
 	}
 	
@@ -46,7 +48,8 @@ public class Errors {
 		Text text = new Text("There aren't any audios to set a picture for!\nClose me to keep going!");
 		HBox holdThings = new HBox();
 		holdThings.getChildren().add(text);
-		primaryStage.setScene(new Scene(holdThings,292,100));
+		primaryStage.setScene(new Scene(holdThings,Constants.errorWidth,Constants.errorHeight));
+		primaryStage.setTitle("Nothing to Set Error");
 		primaryStage.show();
 	}
 	
@@ -75,7 +78,8 @@ public class Errors {
 		});
 		wrapThings.getChildren().addAll(text,buttons);
 		buttons.getChildren().addAll(btYes,btNo);
-		primaryStage.setScene(new Scene(wrapThings,300,100));
+		primaryStage.setScene(new Scene(wrapThings,Constants.errorWidth,Constants.errorHeight));
+		primaryStage.setTitle("Nothing Setup Error");
 		primaryStage.show();
 	}
 }

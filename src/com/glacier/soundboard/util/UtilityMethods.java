@@ -122,6 +122,7 @@ public class UtilityMethods {
 		wrapthings.getChildren().add(radioButtons);
 		wrapthings.getChildren().add(btChoose);
 		primaryStage.setScene(new Scene(wrapthings,width+btChoose.getPrefWidth(),height+btChoose.getPrefHeight()));
+		primaryStage.setTitle("Choose a sound for this image");
 		primaryStage.showAndWait();
 		return choice.get(choice.size()-1).substring(0, choice.get(choice.size()-1).lastIndexOf("."));
 	}

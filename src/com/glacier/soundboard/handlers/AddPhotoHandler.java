@@ -18,7 +18,7 @@ public class AddPhotoHandler implements EventHandler<ActionEvent> {
 		Stage primaryStage = new Stage();
 		FileChooser chooser = new FileChooser();
 		chooser.setInitialDirectory(new File(System.getProperty("user.dir")));
-		chooser.setTitle("Pick a sound");
+		chooser.setTitle("Pick a photo");
 		ExtensionFilter filter = new ExtensionFilter("Compatable photos",Constants.photoExtensions);
 		chooser.getExtensionFilters().add(filter);
 		chooser.setSelectedExtensionFilter(filter);
