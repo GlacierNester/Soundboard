@@ -86,6 +86,8 @@ public class UtilityMethods {
 		ToggleGroup toggle = new ToggleGroup();
 		Button btChoose = new Button("I Choose This One");
 		ArrayList<String> choice = new ArrayList<String>();
+		double height = 0.0;
+		double width = 0.0;
 		for(String x : getKeysList())
 		{
 			if(isAudio(x))
@@ -95,6 +97,11 @@ public class UtilityMethods {
 					RadioButton option = new RadioButton(x);
 					option.setToggleGroup(toggle);
 					radioButtons.getChildren().add(option);
+					height += option.getPrefHeight();
+					if(option.getPrefWidth() > width)
+					{
+						width = option.getPrefWidth();
+					}
 				}
 			}
 		}
@@ -114,7 +121,7 @@ public class UtilityMethods {
 		}
 		wrapthings.getChildren().add(radioButtons);
 		wrapthings.getChildren().add(btChoose);
-		primaryStage.setScene(new Scene(wrapthings,500,500));
+		primaryStage.setScene(new Scene(wrapthings,width+btChoose.getPrefWidth(),height+btChoose.getPrefHeight()));
 		primaryStage.showAndWait();
 		return choice.get(choice.size()-1).substring(0, choice.get(choice.size()-1).lastIndexOf("."));
 	}
@@ -262,5 +269,29 @@ public class UtilityMethods {
 			System.err.println("Error in fetching the properties at " + getCurrentTimestamp());
 		}
 		return props;
+	}
+
+	public static double getLargestWidth(ArrayList<Double> widths) {
+		double ret = -1.0;
+		for(double x : widths)
+		{
+			if(x>ret)
+			{
+				ret=x;
+			}
+		}
+		return ret;
+	}
+
+	public static double getLargestHeight(ArrayList<Double> heights) {
+		double ret = -1.0;
+		for(double x : heights)
+		{
+			if(x>ret)
+			{
+				ret=x;
+			}
+		}
+		return ret;
 	}
 }

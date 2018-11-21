@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Properties;
 
+import com.glacier.soundboard.err.ErrorTypes;
+import com.glacier.soundboard.err.Errors;
 import com.glacier.soundboard.util.UtilityMethods;
 
 import javafx.event.ActionEvent;
@@ -27,15 +29,23 @@ public class ShowMakeSounds implements EventHandler<ActionEvent> {
 
 	@Override
 	public void handle(ActionEvent event) {
+		if(!(UtilityMethods.getKeysList().length == 0))
+		{
 		Stage primaryStage = new Stage();
 		HBox wrapThings = new HBox();
 		VBox buttons = new VBox();
 		Properties props = UtilityMethods.getProperties();
 		String[] keys = UtilityMethods.getKeysList();
 		ArrayList<Button> buttonList = new ArrayList<Button>();
+		ArrayList<Double> heights = new ArrayList<Double>();
+		ArrayList<Double> widths = new ArrayList<Double>();
+		int rowCounter = 0;
 		HBox row = new HBox();
 		buttons.getChildren().add(row);
 		//we have to add the initial row first
+		heights.add(-1.0);
+		widths.add(0.0);
+		//we add an initial value for the height and width of the first row
 		for(String key : keys)
 		{
 			if(!key.toLowerCase().contains(".photo"))
@@ -69,20 +79,26 @@ public class ShowMakeSounds implements EventHandler<ActionEvent> {
 				{
 					row = new HBox();
 					buttons.getChildren().add(row);
+					rowCounter++;
 				}
 				row.getChildren().add(btnItem);
+				if(heights.get(rowCounter) < btnItem.getPrefHeight())
+				{
+					heights.set(rowCounter, btnItem.getPrefHeight());
+				}
+				widths.set(rowCounter, widths.get(rowCounter)+btnItem.getPrefWidth());
 				System.out.println("Button for file " + props.getProperty(key) + " created at " + UtilityMethods.getCurrentTimestamp());
 			}
 		}
-		for(Node x : buttons.getChildren())
-		{
-			System.out.println(x.getParent());
-		}
 		wrapThings.getChildren().add(buttons);
-		//TODO: make the scene respond to the size of things
-		Scene primaryScene = new Scene(wrapThings,200,200);
+		Scene primaryScene = new Scene(wrapThings,UtilityMethods.getLargestWidth(widths),UtilityMethods.getLargestHeight(heights));
 		primaryStage.setScene(primaryScene);
 		primaryStage.show();
+		}
+		else
+		{
+			Errors.showErrorStage(ErrorTypes.NO_AUDIOS_AVAILABLE);
+		}
 	}
 
 }

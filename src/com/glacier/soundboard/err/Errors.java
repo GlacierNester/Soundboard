@@ -1,7 +1,13 @@
 package com.glacier.soundboard.err;
 
+import com.glacier.soundboard.handlers.AddSoundsHandler;
+
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -15,6 +21,10 @@ public class Errors {
 		else if(errorType.equals(ErrorTypes.ALREADY_EXISTS.toString()))
 		{
 			showAlreadySet();
+		}
+		else if(errorType.equals(ErrorTypes.NO_AUDIOS_AVAILABLE.toString()))
+		{
+			showNoAudios();
 		}
 	}
 	public static void showErrorStage(ErrorTypes error)
@@ -37,6 +47,35 @@ public class Errors {
 		HBox holdThings = new HBox();
 		holdThings.getChildren().add(text);
 		primaryStage.setScene(new Scene(holdThings,292,100));
+		primaryStage.show();
+	}
+	
+	private static void showNoAudios() {
+		Stage primaryStage = new Stage();
+		Text text = new Text("Wait, there aren't any audios! Do you want to set some up?");
+		Button btYes = new Button("Yeah, sure");
+		Button btNo = new Button("Uh, no?");
+		HBox buttons = new HBox();
+		VBox wrapThings = new VBox();
+		btYes.setOnAction(new EventHandler<ActionEvent>()
+		{
+			@Override
+			public void handle(ActionEvent event)
+			{
+				new AddSoundsHandler().handle(event);
+			}
+		});
+		btNo.setOnAction(new EventHandler<ActionEvent>()
+		{
+			@Override
+			public void handle(ActionEvent event)
+			{
+				primaryStage.close();
+			}
+		});
+		wrapThings.getChildren().addAll(text,buttons);
+		buttons.getChildren().addAll(btYes,btNo);
+		primaryStage.setScene(new Scene(wrapThings,300,100));
 		primaryStage.show();
 	}
 }
