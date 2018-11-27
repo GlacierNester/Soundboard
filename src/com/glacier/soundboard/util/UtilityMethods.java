@@ -45,8 +45,15 @@ public class UtilityMethods {
 			filename = filename.replace(' ', '_');
 			//these two replacements make the key and the filepath play nice in the properties file
 			File propertiesFile = new File(Constants.propertiesPath);
+			try {
+				propertiesFile.createNewFile();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			if(!propertiesFile.exists())
 			{
+				System.out.println("didn't exist?");
 				createPropertiesFile();
 				propertiesFile = new File(Constants.propertiesPath);
 			}

@@ -14,6 +14,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -50,35 +51,51 @@ public class ChooseABoard implements EventHandler<ActionEvent> {
 				}
 			}
 		}
+		RadioButton temporary = new RadioButton("");
+		TextField newThing = new TextField();
+		temporary.setToggleGroup(toggle);
+		radioButtons.getChildren().add(temporary);
+		radioButtons.getChildren().add(newThing);
 		btChoose.setOnAction(new EventHandler<ActionEvent>(){
 			@Override
 			public void handle(ActionEvent event)
 			{
 				RadioButton rad = (RadioButton) toggle.getSelectedToggle();
-				choice.add(rad.getText());
+				if(rad.getText().isEmpty())
+				{
+					if(!newThing.getText().endsWith(".properties"))
+					{
+						choice.add(newThing.getText()+".properties");
+					}
+					else
+					{
+						choice.add(newThing.getText());
+					}
+				}
+				else
+				{
+					choice.add(rad.getText());
+				}
 				primaryStage.close();
 			}
 		});
-		if(radioButtons.getChildren().isEmpty())
-		{
-			primaryStage.close();
-		}
+		
 		wrapthings.getChildren().add(radioButtons);
 		wrapthings.getChildren().add(btChoose);
 		primaryStage.setScene(new Scene(wrapthings,radioButtons.getPrefWidth()+btChoose.getPrefWidth(),radioButtons.getPrefHeight()+btChoose.getPrefHeight()));
 		primaryStage.setTitle("Choose a soundboard");
-		primaryStage.showAndWait();
 		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>()
 		{
 
 			@Override
 			public void handle(WindowEvent arg0) {
 				// I just need it to call showMakeSounds when we close the window
-				//I know these inline declarations are gross 
+				//I know these inline declarations are gross
 				new ShowMakeSounds().handle(new ActionEvent());
 			}
 		});
-		Constants.setSoundboard(choice.get(choice.size()));
+		primaryStage.showAndWait();
+		Constants.setSoundboard(choice.get(choice.size()-1));
 	}
 
 }
