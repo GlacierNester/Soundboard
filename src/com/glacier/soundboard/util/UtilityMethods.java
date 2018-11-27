@@ -45,12 +45,6 @@ public class UtilityMethods {
 			filename = filename.replace(' ', '_');
 			//these two replacements make the key and the filepath play nice in the properties file
 			File propertiesFile = new File(Constants.propertiesPath);
-			try {
-				propertiesFile.createNewFile();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
 			if(!propertiesFile.exists())
 			{
 				System.out.println("didn't exist?");
@@ -227,6 +221,10 @@ public class UtilityMethods {
 				try {
 					properties.createNewFile();
 					System.out.println("Properties File created at " + getCurrentTimestamp());
+					FileOutputStream out = new FileOutputStream(properties);
+					PrintStream ps = new PrintStream(out);
+					ps.println("issoundboard=yes");
+					ps.close();
 				} catch (IOException e) {
 					System.err.println("Oh dear, making the properties file failed. That's an issue!");
 				}

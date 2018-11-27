@@ -48,7 +48,7 @@ public class ShowMakeSounds implements EventHandler<ActionEvent> {
 			//we add an initial value for the height and width of the first row
 			for(String key : keys)
 			{
-				if(!key.toLowerCase().contains(".photo"))
+				if(!key.toLowerCase().contains(".photo") && !key.toLowerCase().equals("issoundboard"))
 				{
 					Media media = new Media(new File(props.getProperty(key)).toURI().toString());
 					MediaPlayer mediaPlayer = new MediaPlayer(media);
