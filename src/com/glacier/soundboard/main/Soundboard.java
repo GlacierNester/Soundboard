@@ -2,8 +2,8 @@ package com.glacier.soundboard.main;
 
 import com.glacier.soundboard.handlers.AddPhotoHandler;
 import com.glacier.soundboard.handlers.AddSoundsHandler;
+import com.glacier.soundboard.handlers.ChooseABoard;
 import com.glacier.soundboard.handlers.ShowHowTo;
-import com.glacier.soundboard.handlers.ShowMakeSounds;
 import com.glacier.soundboard.util.Constants;
 import com.glacier.soundboard.util.UtilityMethods;
 
@@ -24,13 +24,13 @@ public class Soundboard extends Application {
 		Text question = new Text("What would you like to do?");
 		Button btSound = new Button("Add Sounds");
 		Button btPhoto = new Button("Add Photos");
-		Button btNo = new Button("SoundBoard");
+		Button btChoose = new Button("Choose a Board");
 		Button btHow = new Button("Help me!");
 		btSound.setOnAction(new AddSoundsHandler());
 		btPhoto.setOnAction(new AddPhotoHandler());
-		btNo.setOnAction(new ShowMakeSounds());
+		btChoose.setOnAction(new ChooseABoard());
 		btHow.setOnAction(new ShowHowTo());
-		buttons.getChildren().addAll(btSound,btPhoto,btNo,btHow);
+		buttons.getChildren().addAll(btSound,btPhoto,btChoose,btHow);
 		wrapThings.getChildren().addAll(question,buttons);
 		Scene primaryScene = new Scene(wrapThings,Constants.openingWidth,Constants.openingHeight);
 		primaryStage.setScene(primaryScene);
