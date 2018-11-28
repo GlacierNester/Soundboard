@@ -29,6 +29,7 @@ public class ShowMakeSounds implements EventHandler<ActionEvent> {
 
 	@Override
 	public void handle(ActionEvent event) {
+		System.out.println("Opening Soundboard " + Constants.filename + " at " + UtilityMethods.getCurrentTimestamp());
 		if(!(UtilityMethods.getKeysList().length == 0))
 		{
 			Stage primaryStage = new Stage();
@@ -48,7 +49,7 @@ public class ShowMakeSounds implements EventHandler<ActionEvent> {
 			//we add an initial value for the height and width of the first row
 			for(String key : keys)
 			{
-				if(!key.toLowerCase().contains(".photo"))
+				if(!key.toLowerCase().contains(".photo") && !key.toLowerCase().equals("issoundboard"))
 				{
 					Media media = new Media(new File(props.getProperty(key)).toURI().toString());
 					MediaPlayer mediaPlayer = new MediaPlayer(media);
@@ -80,6 +81,8 @@ public class ShowMakeSounds implements EventHandler<ActionEvent> {
 						row = new HBox();
 						buttons.getChildren().add(row);
 						rowCounter++;
+						heights.add(-1.0);
+						widths.add(-1.0);
 					}
 					row.getChildren().add(btnItem);
 					if(heights.get(rowCounter) < btnItem.getPrefHeight())

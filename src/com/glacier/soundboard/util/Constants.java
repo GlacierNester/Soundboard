@@ -6,7 +6,8 @@ import java.util.List;
 
 public class Constants {
 	public static String baseDrive = File.listRoots()[0].getPath();
-	public static String propertiesPath = baseDrive+"Glacier Nester/properties/SoundbarProperties.properties";
+	public static String filename = "SoundbarProperties.properties";
+	public static String propertiesPath = baseDrive+"Glacier Nester/properties/"+filename;
 	public static String logPath = baseDrive+"Glacier Nester/logs/";
 	public static String howTo = "How to add audio?\n"
 							   + "1. Select an audio\n"
@@ -21,7 +22,7 @@ public class Constants {
 	public static int openingHeight = 99;
 	public static int howToWidth = 602;
 	public static int howToHeight = 256;
-	public static int errorWidth = 300;
+	public static int errorWidth = 400;
 	public static int errorHeight = 100;
 	public static int pickPhotoWidth = 244;
 	public static int pickPhotoHeight = 96;
@@ -30,4 +31,8 @@ public class Constants {
 	private static String[] audiooptions = {"*.mp3","*.aiff","*.m4a","*.wav"};
 	public static List<String> photoExtensions = Arrays.asList(photooptions);
 	public static List<String> audioExtensions = Arrays.asList(audiooptions);
+	public static void setSoundboard(String string) {
+		filename = string;
+		propertiesPath = baseDrive+"Glacier Nester/properties/"+filename;
+	}
 }

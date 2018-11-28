@@ -66,6 +66,7 @@ public class Errors {
 			public void handle(ActionEvent event)
 			{
 				new AddSoundsHandler().handle(event);
+				primaryStage.close();
 			}
 		});
 		btNo.setOnAction(new EventHandler<ActionEvent>()
