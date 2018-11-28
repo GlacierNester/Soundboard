@@ -22,7 +22,7 @@ public class Constants {
 	public static int openingHeight = 99;
 	public static int howToWidth = 602;
 	public static int howToHeight = 256;
-	public static int errorWidth = 300;
+	public static int errorWidth = 400;
 	public static int errorHeight = 100;
 	public static int pickPhotoWidth = 244;
 	public static int pickPhotoHeight = 96;

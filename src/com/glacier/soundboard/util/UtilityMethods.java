@@ -91,17 +91,20 @@ public class UtilityMethods {
 		double width = 0.0;
 		for(String x : getKeysList())
 		{
-			if(isAudio(x))
+			if(!x.equals("issoundboard"))
 			{
-				if(!hasPhoto(x))
+				if(isAudio(x))
 				{
-					RadioButton option = new RadioButton(x);
-					option.setToggleGroup(toggle);
-					radioButtons.getChildren().add(option);
-					height += option.getPrefHeight();
-					if(option.getPrefWidth() > width)
+					if(!hasPhoto(x))
 					{
-						width = option.getPrefWidth();
+						RadioButton option = new RadioButton(x);
+						option.setToggleGroup(toggle);
+						radioButtons.getChildren().add(option);
+						height += option.getPrefHeight();
+						if(option.getPrefWidth() > width)
+						{
+							width = option.getPrefWidth();
+						}
 					}
 				}
 			}
@@ -155,6 +158,7 @@ public class UtilityMethods {
 
 	private static boolean isAudio(String filename) {
 		boolean ret = false;
+		System.out.println("Checking audio with fn " + filename);
 		if(filename.substring(filename.lastIndexOf(".")).contains("mp3"))
 		{
 			ret = true;
