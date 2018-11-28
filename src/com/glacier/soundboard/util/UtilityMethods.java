@@ -236,6 +236,10 @@ public class UtilityMethods {
 			try {
 				properties.createNewFile();
 				System.out.println("Properties File created at " + getCurrentTimestamp());
+				FileOutputStream out = new FileOutputStream(properties);
+				PrintStream ps = new PrintStream(out);
+				ps.println("issoundboard=yes");
+				ps.close();
 			} catch (IOException e) {
 				System.err.println("Oh dear, making the properties file failed. That's an issue!");
 			}

@@ -77,6 +77,8 @@ public class ChooseABoard implements EventHandler<ActionEvent> {
 					choice.add(rad.getText());
 				}
 				primaryStage.close();
+				Constants.setSoundboard(choice.get(choice.size()-1));
+				new ShowMakeSounds().handle(new ActionEvent());
 			}
 		});
 		
@@ -86,16 +88,16 @@ public class ChooseABoard implements EventHandler<ActionEvent> {
 		primaryStage.setTitle("Choose a soundboard");
 		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>()
 		{
-
 			@Override
 			public void handle(WindowEvent arg0) {
 				// I just need it to call showMakeSounds when we close the window
 				//I know these inline declarations are gross
+				primaryStage.close();
+				Constants.setSoundboard(choice.get(choice.size()-1));
 				new ShowMakeSounds().handle(new ActionEvent());
 			}
 		});
 		primaryStage.showAndWait();
-		Constants.setSoundboard(choice.get(choice.size()-1));
 	}
 
 }

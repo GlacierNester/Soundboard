@@ -33,5 +33,6 @@ public class Constants {
 	public static List<String> audioExtensions = Arrays.asList(audiooptions);
 	public static void setSoundboard(String string) {
 		filename = string;
+		propertiesPath = baseDrive+"Glacier Nester/properties/"+filename;
 	}
 }

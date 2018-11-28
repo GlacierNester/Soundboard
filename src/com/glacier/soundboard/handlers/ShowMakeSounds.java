@@ -29,6 +29,7 @@ public class ShowMakeSounds implements EventHandler<ActionEvent> {
 
 	@Override
 	public void handle(ActionEvent event) {
+		System.out.println("Opening Soundboard " + Constants.filename + " at " + UtilityMethods.getCurrentTimestamp());
 		if(!(UtilityMethods.getKeysList().length == 0))
 		{
 			Stage primaryStage = new Stage();
@@ -80,6 +81,8 @@ public class ShowMakeSounds implements EventHandler<ActionEvent> {
 						row = new HBox();
 						buttons.getChildren().add(row);
 						rowCounter++;
+						heights.add(0.0);
+						widths.add(0.0);
 					}
 					row.getChildren().add(btnItem);
 					if(heights.get(rowCounter) < btnItem.getPrefHeight())
