@@ -81,8 +81,8 @@ public class ShowMakeSounds implements EventHandler<ActionEvent> {
 						row = new HBox();
 						buttons.getChildren().add(row);
 						rowCounter++;
-						heights.add(0.0);
-						widths.add(0.0);
+						heights.add(-1.0);
+						widths.add(-1.0);
 					}
 					row.getChildren().add(btnItem);
 					if(heights.get(rowCounter) < btnItem.getPrefHeight())
