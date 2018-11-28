@@ -156,7 +156,7 @@ public class UtilityMethods {
 		return ret;
 	}
 
-	private static boolean isAudio(String filename) {
+	public static boolean isAudio(String filename) {
 		boolean ret = false;
 		System.out.println("Checking audio with fn " + filename);
 		if(filename.substring(filename.lastIndexOf(".")).contains("mp3"))

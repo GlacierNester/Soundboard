@@ -30,7 +30,7 @@ public class ShowMakeSounds implements EventHandler<ActionEvent> {
 	@Override
 	public void handle(ActionEvent event) {
 		System.out.println("Opening Soundboard " + Constants.filename + " at " + UtilityMethods.getCurrentTimestamp());
-		if(!(UtilityMethods.getKeysList().length == 0))
+		if(!(UtilityMethods.getKeysList().length == 1))
 		{
 			Stage primaryStage = new Stage();
 			HBox wrapThings = new HBox();
