@@ -9,7 +9,6 @@ public class Constants {
 	public static String filename = "SoundbarProperties.properties";
 	public static String propertiesPath = baseDrive+"Glacier Nester/properties/"+filename;
 	public static String logPath = baseDrive+"Glacier Nester/logs/";
-	//TODO: update howto
 	public static String howTo = "How to do things?\n"
 							   + "1. Select an audio\n"
 							   + "\t a. Simply press the button that says add sounds\n"
