@@ -8,6 +8,8 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.Scanner;
 
+import com.glacier.soundboard.err.ErrorTypes;
+import com.glacier.soundboard.err.Errors;
 import com.glacier.soundboard.util.Constants;
 import com.glacier.soundboard.util.UtilityMethods;
 
@@ -44,6 +46,11 @@ public class DeleteItem implements EventHandler<ActionEvent> {
 			@Override
 			public void handle(ActionEvent event)
 			{
+				if(toggle.getToggles().isEmpty())
+				{
+					primaryStage.close();
+					return;
+				}
 				RadioButton rad = (RadioButton) toggle.getSelectedToggle();
 				try {
 					String filePath = UtilityMethods.getProperties().getProperty(rad.getText());
@@ -84,7 +91,11 @@ public class DeleteItem implements EventHandler<ActionEvent> {
 				primaryStage.close();
 			}
 		});
-		
+		if(radioButtons.getChildren().isEmpty())
+		{
+			primaryStage.close();
+			Errors.showErrorStage(ErrorTypes.NO_SOUNDBOARDS_AVAILABLE);
+		}
 		wrapthings.getChildren().add(radioButtons);
 		wrapthings.getChildren().add(btChoose);
 		primaryStage.setScene(new Scene(wrapthings,radioButtons.getPrefWidth()+btChoose.getPrefWidth(),radioButtons.getPrefHeight()+btChoose.getPrefHeight()));

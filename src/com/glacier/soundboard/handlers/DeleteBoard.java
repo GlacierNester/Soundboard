@@ -51,13 +51,18 @@ public class DeleteBoard implements EventHandler<ActionEvent> {
 		}
 		if(radioButtons.getChildren().isEmpty())
 		{
-			Errors.showErrorStage(ErrorTypes.NO_SOUNDBOARDS_AVAILABLE);
 			primaryStage.close();
+			Errors.showErrorStage(ErrorTypes.NO_SOUNDBOARDS_AVAILABLE);
 		}
 		btChoose.setOnAction(new EventHandler<ActionEvent>(){
 			@Override
 			public void handle(ActionEvent event)
 			{
+				if(toggle.getToggles().isEmpty())
+				{
+					primaryStage.close();
+					return;
+				}
 				RadioButton rad = (RadioButton) toggle.getSelectedToggle();
 				try {
 					System.gc();

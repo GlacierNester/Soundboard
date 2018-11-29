@@ -30,7 +30,7 @@ public class Errors {
 		}
 		else if(errorType.equals(ErrorTypes.NO_SOUNDBOARDS_AVAILABLE.toString()))
 		{
-			Constants.setSoundboard("Soundboard.properties");
+			Constants.setSoundboard("Soundbar.properties");
 			UtilityMethods.createPropertiesFile();
 			showCreateDefaultProps();
 		}
