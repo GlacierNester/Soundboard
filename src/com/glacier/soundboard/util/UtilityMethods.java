@@ -156,7 +156,7 @@ public class UtilityMethods {
 		return ret;
 	}
 
-	private static boolean isAudio(String filename) {
+	public static boolean isAudio(String filename) {
 		boolean ret = false;
 		System.out.println("Checking audio with fn " + filename);
 		if(filename.substring(filename.lastIndexOf(".")).contains("mp3"))
@@ -213,7 +213,7 @@ public class UtilityMethods {
     	}
 	}
 
-	private static void createPropertiesFile() 
+	public static void createPropertiesFile() 
 	{
 		File folder = new File(Constants.propertiesPath.substring(0,Constants.propertiesPath.lastIndexOf("/")));
 		if(!folder.exists())
@@ -277,7 +277,12 @@ public class UtilityMethods {
 		try 
 		{
 			props.load(new FileInputStream(new File(Constants.propertiesPath)));
-		} 
+		}
+		catch(FileNotFoundException ex)
+		{
+			System.err.println("File not found at "+ getCurrentTimestamp() + ", creating");
+			createPropertiesFile();
+		}
 		catch (IOException e) 
 		{
 			System.err.println("Error in fetching the properties at " + getCurrentTimestamp());
