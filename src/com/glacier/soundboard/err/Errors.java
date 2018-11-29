@@ -2,6 +2,7 @@ package com.glacier.soundboard.err;
 
 import com.glacier.soundboard.handlers.AddSoundsHandler;
 import com.glacier.soundboard.util.Constants;
+import com.glacier.soundboard.util.UtilityMethods;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -27,10 +28,25 @@ public class Errors {
 		{
 			showNoAudios();
 		}
+		else if(errorType.equals(ErrorTypes.NO_SOUNDBOARDS_AVAILABLE.toString()))
+		{
+			Constants.setSoundboard("Soundboard.properties");
+			UtilityMethods.createPropertiesFile();
+			showCreateDefaultProps();
+		}
 	}
 	public static void showErrorStage(ErrorTypes error)
 	{
 		showErrorStage(error.toString());
+	}
+	private static void showCreateDefaultProps() {
+		Stage primaryStage = new Stage();
+		Text text = new Text("There aren't any soundboards. \nI made a default, empty one for you!");
+		HBox holdThings = new HBox();
+		holdThings.getChildren().add(text);
+		primaryStage.setScene(new Scene(holdThings,Constants.errorWidth,Constants.errorHeight));
+		primaryStage.setTitle("Empty Soundboards Error");
+		primaryStage.show();
 	}
 	private static void showAlreadySet() {
 		Stage primaryStage = new Stage();

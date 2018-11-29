@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Properties;
 
+import com.glacier.soundboard.err.ErrorTypes;
+import com.glacier.soundboard.err.Errors;
 import com.glacier.soundboard.util.Constants;
 import com.glacier.soundboard.util.UtilityMethods;
 
@@ -46,6 +48,11 @@ public class DeleteBoard implements EventHandler<ActionEvent> {
 					System.err.println("Error in picking a soundboard to delete at " + UtilityMethods.getCurrentTimestamp());
 				}
 			}
+		}
+		if(radioButtons.getChildren().isEmpty())
+		{
+			Errors.showErrorStage(ErrorTypes.NO_SOUNDBOARDS_AVAILABLE);
+			primaryStage.close();
 		}
 		btChoose.setOnAction(new EventHandler<ActionEvent>(){
 			@Override
