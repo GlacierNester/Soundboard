@@ -11,57 +11,154 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Properties;
 
-import javafx.stage.FileChooser;
+import com.glacier.soundboard.err.ErrorTypes;
+import com.glacier.soundboard.err.Errors;
+
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+
 public class UtilityMethods {
+	/**
+	 * Writes the data of a given file to the properties file so the rest of the soundbar can use it
+	 * @param file the file whose data we're writing to the properties file
+	 */
 	public static void writeFileDataToProperties(File file) 
 	{
 		String filename = file.getName();
 		String filepath = file.getPath();
-		if(!isAudio(filename))
+		if(!isAudio(filename) && isPhoto(filename))
 		{
-			Stage primaryStage = new Stage();
-			FileChooser chooser = new FileChooser();
-			chooser.setInitialDirectory(new File(System.getProperty("user.dir")));
-			chooser.setTitle("What sound is this for?");
-			File temp = chooser.showOpenDialog(primaryStage);
-			filename=temp.getName().substring(0, temp.getName().lastIndexOf("."));
-			filename+=".photo";
+			filename = getChosenFile() + ".photo";
 		}
-		filepath = filepath.replace('\\', '/');
-		filename = filename.replace(' ', '_');
-		//turns out that properties files don't like having spaces in the key, so we simply write the key to have underscores instead of spaces
-		//ezpz
-		File propertiesFile = new File(Constants.propertiesPath);
-		if(!propertiesFile.exists())
+		if(!filename.equals(".photo"))
 		{
-			createPropertiesFile();
-			propertiesFile = new File(Constants.propertiesPath);
-		}
-		try 
-		{
-			if(!getProperties().containsKey(filename))
+			//because if it equals ".photo" then they're coming back from the photo selector without having any audios to assign it to
+			filepath = filepath.replace('\\', '/');
+			filename = filename.replace(' ', '_');
+			//these two replacements make the key and the filepath play nice in the properties file
+			File propertiesFile = new File(Constants.propertiesPath);
+			if(!propertiesFile.exists())
 			{
-				FileOutputStream outfos = new FileOutputStream(propertiesFile,true);
-				//I was today (11/19/2018) years old when I realized again
-				//that without that boolean there, it doesn't just append to the file
-				PrintStream outps = new PrintStream(outfos);
-				outps.println(filename + "=" + filepath);
-				System.out.println("Filename written is " + filename);
-				System.out.println("Filepath written is " + filepath);
-				System.out.println("Filename/path written at " + getCurrentTimestamp());
-				outps.close();
+				System.out.println("didn't exist?");
+				createPropertiesFile();
+				propertiesFile = new File(Constants.propertiesPath);
 			}
-		} catch (FileNotFoundException e) 
+			try 
+			{
+				if(!getProperties().containsKey(filename))
+				{
+					FileOutputStream outfos = new FileOutputStream(propertiesFile,true);
+					//I was today (11/19/2018) years old when I realized again
+					//that without that boolean there, it doesn't just append to the file
+					PrintStream outps = new PrintStream(outfos);
+					outps.println(filename + "=" + filepath);
+					System.out.println("Filename written is " + filename);
+					System.out.println("Filepath written is " + filepath);
+					System.out.println("Filename/path written at " + getCurrentTimestamp());
+					outps.close();
+				}
+				else
+				{
+					Errors.showErrorStage(ErrorTypes.ALREADY_EXISTS);
+				}
+			} catch (FileNotFoundException e) 
+			{
+				System.err.println("Error writing to properties file, not found despite our efforts to create it");
+			}
+		}
+		else
 		{
-			System.err.println("Error writing to properties file, not found despite our efforts to create it");
+			Errors.showErrorStage(ErrorTypes.NO_AUDIO_TO_SET);
 		}
 	}
-	
-	private static boolean isAudio(String filename) {
+
+	private static String getChosenFile() {
+		Stage primaryStage = new Stage();
+		HBox wrapthings = new HBox();
+		VBox radioButtons = new VBox();
+		ToggleGroup toggle = new ToggleGroup();
+		Button btChoose = new Button("I Choose This One");
+		ArrayList<String> choice = new ArrayList<String>();
+		double height = 0.0;
+		double width = 0.0;
+		for(String x : getKeysList())
+		{
+			if(!x.equals("issoundboard"))
+			{
+				if(isAudio(x))
+				{
+					if(!hasPhoto(x))
+					{
+						RadioButton option = new RadioButton(x);
+						option.setToggleGroup(toggle);
+						radioButtons.getChildren().add(option);
+						height += option.getPrefHeight();
+						if(option.getPrefWidth() > width)
+						{
+							width = option.getPrefWidth();
+						}
+					}
+				}
+			}
+		}
+		btChoose.setOnAction(new EventHandler<ActionEvent>(){
+			@Override
+			public void handle(ActionEvent event)
+			{
+				RadioButton rad = (RadioButton) toggle.getSelectedToggle();
+				choice.add(rad.getText());
+				primaryStage.close();
+			}
+		});
+		if(radioButtons.getChildren().isEmpty())
+		{
+			primaryStage.close();
+			return "";
+		}
+		wrapthings.getChildren().add(radioButtons);
+		wrapthings.getChildren().add(btChoose);
+		primaryStage.setScene(new Scene(wrapthings,width+btChoose.getPrefWidth(),height+btChoose.getPrefHeight()));
+		primaryStage.setTitle("Choose a sound for this image");
+		primaryStage.showAndWait();
+		return choice.get(choice.size()-1).substring(0, choice.get(choice.size()-1).lastIndexOf("."));
+	}
+
+	public static boolean hasPhoto(String x) {
+		return getProperties().containsKey(x.substring(0, x.lastIndexOf("."))+ ".photo");
+	}
+
+	private static boolean isPhoto(String filename) {
 		boolean ret = false;
-		
+		if(filename.substring(filename.lastIndexOf(".")).contains("bmp"))
+		{
+			ret = true;
+		}
+		if(filename.substring(filename.lastIndexOf(".")).contains("gif"))
+		{
+			ret = true;
+		}
+		if(filename.substring(filename.lastIndexOf(".")).contains("jpeg"))
+		{
+			ret = true;
+		}
+		if(filename.substring(filename.lastIndexOf(".")).contains("png"))
+		{
+			ret = true;
+		}
+		return ret;
+	}
+
+	public static boolean isAudio(String filename) {
+		boolean ret = false;
+		System.out.println("Checking audio with fn " + filename);
 		if(filename.substring(filename.lastIndexOf(".")).contains("mp3"))
 		{
 			ret = true;
@@ -74,7 +171,7 @@ public class UtilityMethods {
 		{
 			ret = true;
 		}
-		if(filename.substring(filename.lastIndexOf(".")).contains("aac"))
+		if(filename.substring(filename.lastIndexOf(".")).contains("m4a"))
 		{
 			ret = true;
 		}
@@ -116,7 +213,7 @@ public class UtilityMethods {
     	}
 	}
 
-	private static void createPropertiesFile() 
+	public static void createPropertiesFile() 
 	{
 		File folder = new File(Constants.propertiesPath.substring(0,Constants.propertiesPath.lastIndexOf("/")));
 		if(!folder.exists())
@@ -128,6 +225,10 @@ public class UtilityMethods {
 				try {
 					properties.createNewFile();
 					System.out.println("Properties File created at " + getCurrentTimestamp());
+					FileOutputStream out = new FileOutputStream(properties);
+					PrintStream ps = new PrintStream(out);
+					ps.println("issoundboard=yes");
+					ps.close();
 				} catch (IOException e) {
 					System.err.println("Oh dear, making the properties file failed. That's an issue!");
 				}
@@ -139,6 +240,10 @@ public class UtilityMethods {
 			try {
 				properties.createNewFile();
 				System.out.println("Properties File created at " + getCurrentTimestamp());
+				FileOutputStream out = new FileOutputStream(properties);
+				PrintStream ps = new PrintStream(out);
+				ps.println("issoundboard=yes");
+				ps.close();
 			} catch (IOException e) {
 				System.err.println("Oh dear, making the properties file failed. That's an issue!");
 			}
@@ -160,10 +265,8 @@ public class UtilityMethods {
 		{
 			System.err.println("Error in fetching the list of keys at " + getCurrentTimestamp());
 		}
-		//note: filenames can't contain spaces, handle that in the input method
 		ArrayList<String> listKeys = new ArrayList<String>();
 		props.forEach((key,value) -> listKeys.add((String) key));
-		System.out.println("List of Keys Fetched at " + getCurrentTimestamp());
 		String[] keys = listKeys.toArray(new String[listKeys.size()]);
 		return keys;
 	}
@@ -174,12 +277,40 @@ public class UtilityMethods {
 		try 
 		{
 			props.load(new FileInputStream(new File(Constants.propertiesPath)));
-		} 
+		}
+		catch(FileNotFoundException ex)
+		{
+			System.err.println("File not found at "+ getCurrentTimestamp() + ", creating");
+			createPropertiesFile();
+		}
 		catch (IOException e) 
 		{
 			System.err.println("Error in fetching the properties at " + getCurrentTimestamp());
 		}
-		System.out.println("Properties Fetched at " + getCurrentTimestamp());
 		return props;
+	}
+
+	public static double getLargestWidth(ArrayList<Double> widths) {
+		double ret = -1.0;
+		for(double x : widths)
+		{
+			if(x>ret)
+			{
+				ret=x;
+			}
+		}
+		return ret;
+	}
+
+	public static double getLargestHeight(ArrayList<Double> heights) {
+		double ret = -1.0;
+		for(double x : heights)
+		{
+			if(x>ret)
+			{
+				ret=x;
+			}
+		}
+		return ret;
 	}
 }

@@ -1,8 +1,12 @@
 package com.glacier.soundboard.handlers;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Properties;
 
+import com.glacier.soundboard.err.ErrorTypes;
+import com.glacier.soundboard.err.Errors;
+import com.glacier.soundboard.util.Constants;
 import com.glacier.soundboard.util.UtilityMethods;
 
 import javafx.event.ActionEvent;
@@ -25,53 +29,80 @@ public class ShowMakeSounds implements EventHandler<ActionEvent> {
 
 	@Override
 	public void handle(ActionEvent event) {
-		// TODO For each name/file pair in the properties file, show a button that plays a sound
-		// potentially, if we can show images in buttons instead, make it so, but we gotta get soundmaking first 
-		Stage primaryStage = new Stage();
-		HBox wrapThings = new HBox();
-		VBox buttons = new VBox();
-		Properties props = UtilityMethods.getProperties();
-		String[] keys = UtilityMethods.getKeysList();
-		for(String key : keys)
+		System.out.println("Opening Soundboard " + Constants.filename + " at " + UtilityMethods.getCurrentTimestamp());
+		if(!(UtilityMethods.getKeysList().length <= 1))
 		{
-			if(!key.toLowerCase().contains(".photo"))
+			Stage primaryStage = new Stage();
+			HBox wrapThings = new HBox();
+			VBox buttons = new VBox();
+			Properties props = UtilityMethods.getProperties();
+			String[] keys = UtilityMethods.getKeysList();
+			ArrayList<Button> buttonList = new ArrayList<Button>();
+			ArrayList<Double> heights = new ArrayList<Double>();
+			ArrayList<Double> widths = new ArrayList<Double>();
+			int rowCounter = 0;
+			HBox row = new HBox();
+			buttons.getChildren().add(row);
+			//we have to add the initial row first
+			heights.add(-1.0);
+			widths.add(0.0);
+			//we add an initial value for the height and width of the first row
+			for(String key : keys)
 			{
-				System.out.println("Creating button for file " + props.getProperty(key));
-				Media media = new Media(new File(props.getProperty(key)).toURI().toString());
-				MediaPlayer mediaPlayer = new MediaPlayer(media);
-				Button btnItem = new Button(key);
-				btnItem.setOnAction(new EventHandler<ActionEvent>()
+				if(!key.toLowerCase().contains(".photo") && !key.toLowerCase().equals("issoundboard"))
 				{
-					@Override
-					public void handle(ActionEvent event)
+					Media media = new Media(new File(props.getProperty(key)).toURI().toString());
+					MediaPlayer mediaPlayer = new MediaPlayer(media);
+					Button btnItem = new Button(key);
+					btnItem.setOnAction(new EventHandler<ActionEvent>()
 					{
-						mediaPlayer.seek(mediaPlayer.getStartTime());
-						mediaPlayer.play();
-						System.out.println("Playing item " +mediaPlayer.getMedia().getSource()+" at " + UtilityMethods.getCurrentTimestamp());
+						@Override
+						public void handle(ActionEvent event)
+						{
+							mediaPlayer.seek(mediaPlayer.getStartTime());
+							mediaPlayer.play();
+							System.out.println("Playing item " +mediaPlayer.getMedia().getSource()+" at " + UtilityMethods.getCurrentTimestamp());
+						}
+					});
+					if(UtilityMethods.hasPhoto(key))
+					{
+						Image img = new Image(new File(props.getProperty(key.substring(0,key.lastIndexOf("."))+".photo")).toURI().toString());
+						BackgroundImage backgroundImage = new BackgroundImage(img, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+				        Background background = new Background(backgroundImage);
+				        btnItem.setBackground(background);
+				        btnItem.setText(" ");
+				        btnItem.setMaxSize(img.getWidth(),img.getHeight());
+				        btnItem.setPrefSize(img.getWidth(),img.getHeight());
+				        btnItem.setMinSize(img.getWidth(),img.getHeight());
 					}
-				});
-				if(props.containsKey(key.substring(0,key.lastIndexOf("."))+".photo"))
-				{
-					Image img = new Image(new File(props.getProperty(key.substring(0,key.lastIndexOf("."))+".photo")).toURI().toString());
-					BackgroundImage backgroundImage = new BackgroundImage(img, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
-			        Background background = new Background(backgroundImage);
-			        btnItem.setBackground(background);
-			        btnItem.setText(" ");
-			        btnItem.setMaxSize(img.getWidth(),img.getHeight());
-			        btnItem.setPrefSize(img.getWidth(),img.getHeight());
-			        btnItem.setMinSize(img.getWidth(),img.getHeight());
+					buttonList.add(btnItem);
+					if(buttonList.size()%Constants.rowSize == 1 && buttonList.size()>Constants.rowSize)
+					{
+						row = new HBox();
+						buttons.getChildren().add(row);
+						rowCounter++;
+						heights.add(-1.0);
+						widths.add(-1.0);
+					}
+					row.getChildren().add(btnItem);
+					if(heights.get(rowCounter) < btnItem.getPrefHeight())
+					{
+						heights.set(rowCounter, btnItem.getPrefHeight());
+					}
+					widths.set(rowCounter, widths.get(rowCounter)+btnItem.getPrefWidth());
+					System.out.println("Button for file " + props.getProperty(key) + " created at " + UtilityMethods.getCurrentTimestamp());
 				}
-				buttons.getChildren().add(btnItem);
-				System.out.println("Button for file " + props.getProperty(key) + " created at " + UtilityMethods.getCurrentTimestamp());
 			}
+			wrapThings.getChildren().add(buttons);
+			Scene primaryScene = new Scene(wrapThings,UtilityMethods.getLargestWidth(widths),UtilityMethods.getLargestHeight(heights));
+			primaryStage.setScene(primaryScene);
+			primaryStage.setTitle("Soundboard");
+			primaryStage.show();
 		}
-//		buttons.setFillWidth(true);
-//		wrapThings.setFillHeight(true);
-		wrapThings.getChildren().add(buttons);
-		//TODO: size this to the overall size of the buttons
-		Scene primaryScene = new Scene(wrapThings,200,200);
-		primaryStage.setScene(primaryScene);
-		primaryStage.show();
+		else
+		{
+			Errors.showErrorStage(ErrorTypes.NO_AUDIOS_AVAILABLE);
+		}
 	}
 
 }

@@ -16,8 +16,9 @@ public class ShowHowTo implements EventHandler<ActionEvent> {
 		Stage primaryStage = new Stage();
 		VBox wrapThings = new VBox();
 		wrapThings.getChildren().add(new Text(Constants.howTo));
-		Scene primaryScene = new Scene(wrapThings,Constants.howToSizeOne,Constants.howToSizeTwo);
+		Scene primaryScene = new Scene(wrapThings,Constants.howToWidth,Constants.howToHeight);
 		primaryStage.setScene(primaryScene);
+		primaryStage.setTitle("Help! I need somebody, Help!");
 		primaryStage.show();
 		
 	}

@@ -1,6 +1,10 @@
 package com.glacier.soundboard.main;
 
-import com.glacier.soundboard.handlers.AddThingsHandler;
+import com.glacier.soundboard.handlers.AddPhotoHandler;
+import com.glacier.soundboard.handlers.AddSoundsHandler;
+import com.glacier.soundboard.handlers.ChooseABoard;
+import com.glacier.soundboard.handlers.DeleteBoard;
+import com.glacier.soundboard.handlers.DeleteItem;
 import com.glacier.soundboard.handlers.ShowHowTo;
 import com.glacier.soundboard.handlers.ShowMakeSounds;
 import com.glacier.soundboard.util.Constants;
@@ -20,17 +24,28 @@ public class Soundboard extends Application {
 	public void start(Stage primaryStage) throws Exception {
 		VBox wrapThings = new VBox();
 		HBox buttons = new HBox();
+		HBox buttonsTwo = new HBox();
 		Text question = new Text("What would you like to do?");
-		Button btYes = new Button("Add Things");
-		Button btNo = new Button("SoundBoard");
+		Button btSound = new Button("Add Sounds");
+		Button btPhoto = new Button("Add Photos");
+		Button btChoose = new Button("Choose a Board");
 		Button btHow = new Button("Help me!");
-		btYes.setOnAction(new AddThingsHandler());
-		btNo.setOnAction(new ShowMakeSounds());
+		Button btStart = new Button("Start Soundboard");
+		Button btDeleteBoard = new Button("Delete a Board");
+		Button btDeleteSound = new Button("Delete an Item");
+		btSound.setOnAction(new AddSoundsHandler());
+		btPhoto.setOnAction(new AddPhotoHandler());
+		btChoose.setOnAction(new ChooseABoard());
 		btHow.setOnAction(new ShowHowTo());
-		buttons.getChildren().addAll(btYes,btNo,btHow);
-		wrapThings.getChildren().addAll(question,buttons);
-		Scene primaryScene = new Scene(wrapThings,Constants.openingSizeOne,Constants.openingSizeTwo);
+		btStart.setOnAction(new ShowMakeSounds());
+		btDeleteBoard.setOnAction(new DeleteBoard());
+		btDeleteSound.setOnAction(new DeleteItem());
+		buttons.getChildren().addAll(btSound,btPhoto,btChoose,btHow);
+		buttonsTwo.getChildren().addAll(btStart,btDeleteBoard,btDeleteSound);
+		wrapThings.getChildren().addAll(question,buttons,buttonsTwo);
+		Scene primaryScene = new Scene(wrapThings,Constants.openingWidth,Constants.openingHeight);
 		primaryStage.setScene(primaryScene);
+		primaryStage.setTitle("Soundboard Menu");
 		primaryStage.show();
 	}
 	
